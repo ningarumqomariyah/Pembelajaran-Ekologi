@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ekologi dan Keanekaragaman Hayati Indonesia</title>
+    <style>
+        /* Gaya Dasar */
+        body {
+            font-family: 'Comic Sans MS', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f9f4;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        /* Pengaturan Layar / Halaman */
+        .screen {
+            display: none;
+            width: 100vw;
+            min-height: 100vh;
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            position: relative;
+        }
+        .active-screen {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Background Layar */
+        #screen-login { background-image: url('gambar.1.jpeg'); }
+        #screen-menu { background-image: url('gambar.2.jpeg'); }
+        #screen-game { background-image: url('gambar.1.jpeg'); }
+
+        /* Kontainer Utama untuk Konten */
+        .container {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 800px;
+            margin: 50px auto;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
+
+        /* Halaman Login */
+        .login-box {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 253, 240, 0.95);
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            border: 3px solid #8B4513;
+        }
+        .login-box h2 { color: #2E8B57; margin-bottom: 20px; }
+        .login-box input {
+            width: 90%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 2px solid #ccc;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+        .btn-next {
+            position: absolute;
+            bottom: 30px;
+            right: 40px;
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px 30px;
+            font-size: 18px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            font-weight: bold;
+        }
+        .btn-next:hover { background-color: #45a049; }
+
+        /* Menu Utama & Game Menu */
+        .menu-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            height: 100vh;
+        }
+        .menu-card {
+            background: rgba(255, 255, 255, 0.95);
+            border: 3px solid #2E8B57;
+            border-radius: 20px;
+            width: 250px;
+            padding: 30px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.3s;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+        }
+        .menu-card:hover { transform: scale(1.05); }
+        .menu-card h3 { color: #8B4513; font-size: 24px; }
+        .menu-card p { font-size: 14px; color: #555; }
+        .menu-card img.icon { width: 80px; height: 80px; margin-bottom: 15px; }
+
+        /* Tombol Navigasi Bawah */
+        .btn-back {
+            background-color: #e74c3c;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 20px;
+            font-size: 16px;
+        }
+
+        /* Halaman Pendahuluan */
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            border-radius: 15px;
+            border: 5px solid #2E8B57;
+        }
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Halaman Materi */
+        .materi-content h1, .materi-content h2, .materi-content h3 { color: #2E8B57; }
+        .materi-content p, .materi-content li { line-height: 1.8; font-size: 17px; }
+        .materi-box {
+            background-color: #fff8dc;
+            border-left: 5px solid #ffa500;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+        .materi-img {
+            width: 100%;
+            max-width: 600px;
+            border-radius: 10px;
+            display: block;
+            margin: 20px auto;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+
+        /* Chatbot AI */
+        .chatbot-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background-color: #2c3e50;
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 30px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            z-index: 1000;
+            animation: bounce 2s infinite;
+        }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+            40% {transform: translateY(-20px);}
+            60% {transform: translateY(-10px);}
+        }
+        .chat-window {
+            display: none;
+            position: fixed;
+            bottom: 100px;
+            right: 30px;
+            width: 300px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            z-index: 1001;
+            overflow: hidden;
+            border: 2px solid #2c3e50;
+        }
+        .chat-header { background: #2c3e50; color: white; padding: 15px; text-align: center; font-weight: bold; }
+        .chat-body { padding: 15px; height: 200px; overflow-y: auto; background: #f9f9f9; font-size: 14px;}
+        .chat-input { display: flex; border-top: 1px solid #ddd; }
+        .chat-input input { flex: 1; padding: 10px; border: none; outline: none; }
+        .chat-input button { background: #2E8B57; color: white; border: none; padding: 10px 15px; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <!-- 1. HALAMAN LOGIN -->
+    <div id="screen-login" class="screen active-screen">
+        <div class="login-box">
+            <h2>🌿 LOGIN PEMBELAJARAN 🌿<br>Ekologi & Keanekaragaman Hayati</h2>
+            <input type="text" id="nama" placeholder="Masukkan Nama Lengkap Anda" required>
+            <input type="text" id="kelas" placeholder="Masukkan Kelas Anda" required>
+        </div>
+        <button class="btn-next" onclick="masukLayar('screen-menu')">Masuk ➔</button>
+    </div>
+
+    <!-- 2. HALAMAN MENU UTAMA -->
+    <div id="screen-menu" class="screen">
+        <button class="btn-back" style="position: absolute; top: 20px; left: 20px;" onclick="masukLayar('screen-login')">⬅ Kembali</button>
+        <div class="menu-container">
+            <div class="menu-card" onclick="masukLayar('screen-pendahuluan')">
+                <h3>Pendahuluan</h3>
+                <p>Tonton video pengantar yang seru!</p>
+            </div>
+            <div class="menu-card" onclick="masukLayar('screen-materi')">
+                <h3>Materi</h3>
+                <p>Belajar asyik tentang ekosistem & interaksinya.</p>
+            </div>
+            <div class="menu-card" onclick="masukLayar('screen-game')">
+                <h3>Game</h3>
+                <p>Uji pemahamanmu dengan bermain!</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. HALAMAN PENDAHULUAN (VIDEO) -->
+    <div id="screen-pendahuluan" class="screen" style="background-color: #e8f5e9;">
+        <div class="container">
+            <h1 style="text-align: center; color: #2E8B57;">🎬 Pendahuluan Materi</h1>
+            <p style="text-align: center; margin-bottom: 20px;">Silakan tonton video pengantar di bawah ini ya!</p>
+            <div class="video-container">
+                <!-- Mengubah usp=sharing menjadi preview agar bisa di-embed -->
+                <iframe src="https://drive.google.com/file/d/1PV6NcBLJjQkDtP1VRjggHrVyNBG0rPux/preview" frameborder="0" allowfullscreen></iframe>
+            </div>
+            <button class="btn-back" onclick="masukLayar('screen-menu')">⬅ Kembali ke Menu Utama</button>
+        </div>
+    </div>
+
+    <!-- 4. HALAMAN MATERI -->
+    <div id="screen-materi" class="screen" style="background-color: #fff;">
+        <div class="container materi-content">
+            <h1>📖 Materi Belajar: Ekologi</h1>
+            
+            <div class="materi-box">
+                <h2>A. Bagaimana Pengaruh Lingkungan terhadap suatu Organisme 🌱</h2>
+                
+                <h3>1. Lingkungan Makhluk Hidup</h3>
+                <p>Lingkungan hidup dapat dipahami sebagai segala sesuatu yang berada di sekitar makhluk hidup dan memengaruhi kelangsungan hidupnya. Lingkungan terdiri atas komponen <b>biotik</b> (manusia, hewan, tumbuhan, mikroorganisme), serta komponen <b>abiotik</b> (air, tanah, udara, cahaya matahari, dan suhu). Semua komponen tersebut saling berhubungan dan membentuk suatu kesatuan yang mendukung kehidupan.</p>
+                <p>Lingkungan yang terjaga dengan baik dapat menyediakan kebutuhan dasar. Sebaliknya, kerusakan lingkungan dapat mengganggu keseimbangan ekosistem. Oleh karena itu, menjaga lingkungan hidup merupakan tanggung jawab bersama!</p>
+                
+                <h3>2. Lingkungan Abiotik</h3>
+                <p>Faktor abiotik merupakan komponen lingkungan <i>tak hidup</i> yang memengaruhi persebaran suatu spesies, seperti suhu, air, kadar garam, cahaya, dan jenis tanah. Kondisi yang tidak sesuai dapat menghambat kelangsungan hidup.</p>
+                
+                <h3>3. Lingkungan Biotik</h3>
+                <p>Faktor biotik merupakan makhluk hidup lain yang dapat membatasi persebaran suatu spesies melalui interaksi antarorganisme, seperti pemangsaan, parasitisme, dan persaingan.</p>
+            </div>
+
+            <div class="materi-box">
+                <h2>B. Bagaimana Interaksi Antara Komponen Penyusun Suatu Ekosistem 🌍</h2>
+                <h3>1. Tingkatan Ekosistem</h3>
+                <ul>
+                    <li><b>Individu:</b> Satu organisme tunggal (contoh: satu pohon mangga, seekor harimau).</li>
+                    <li><b>Populasi:</b> Kumpulan individu sejenis yang hidup di tempat dan waktu tertentu.</li>
+                    <li><b>Komunitas:</b> Kumpulan berbagai populasi yang hidup di suatu wilayah yang sama.</li>
+                    <li><b>Bioma:</b> Ekosistem berskala besar berdasarkan kondisi iklim.</li>
+                    <li><b>Biosfer:</b> Tingkatan terbesar mencakup seluruh makhluk hidup di Bumi.</li>
+                </ul>
+
+                <h3>2. Aliran Energi ⚡</h3>
+                <p><b>a. Rantai makanan</b><br>Peristiwa makan dan dimakan dengan urutan tertentu.</p>
+                <img src="gambar rantai makanan.jpeg" alt="Rantai Makanan" class="materi-img">
+                
+                <p><b>b. Jaring-jaring makanan</b><br>Kumpulan dari beberapa rantai makanan yang saling berhubungan.</p>
+                <img src="gambar jaring-jaring makanan.jpeg" alt="Jaring-jaring Makanan" class="materi-img">
+            </div>
+
+            <div class="materi-box">
+                <h2>3. Daur Biogeokimia 🔄</h2>
+                
+                <h3>a. Siklus Air 💧</h3>
+                <img src="gambar siklus air.jpeg" alt="Siklus Air" class="materi-img">
+                <p>Siklus air merupakan peredaran air dari bumi ke atmosfer melalui evaporasi dan transpirasi, kemudian kembali ke bumi melalui hujan (presipitasi). Siklus ini digerakkan energi matahari dan menjaga ketersediaan air.</p>
+
+                <h3>b. Siklus Karbon ⚫</h3>
+                <img src="gambar siklus karbon.jpeg" alt="Siklus Karbon" class="materi-img">
+                <p>Peredaran karbon dari lingkungan abiotik ke makhluk hidup dan kembali lagi. Karbon dioksida (CO₂) di udara diserap tumbuhan melalui fotosintesis, berpindah ke hewan, dan kembali ke alam melalui respirasi & penguraian.</p>
+
+                <h3>c. Siklus Nitrogen 💨</h3>
+                <img src="gambar siklus nitrogen.jpeg" alt="Siklus Nitrogen" class="materi-img">
+                <p>Gas nitrogen (N₂) difiksasi oleh bakteri menjadi amonia. Bakteri nitrifikasi mengubah amonium menjadi nitrat yang diserap tumbuhan. Nitrogen kembali ke tanah lewat sisa organisme, dan sebagian kembali ke udara oleh bakteri denitrifikasi.</p>
+            </div>
+
+            <div class="materi-box">
+                <h2>4. Interaksi Antar Komponen Ekosistem 🤝</h2>
+                <ul>
+                    <li><b>Kompetisi:</b> Interaksi negatif memperebutkan sumber daya terbatas (contoh: memperebutkan air/makanan).</li>
+                    <li><b>Predasi (+/-):</b> Interaksi predator membunuh dan memakan mangsa.</li>
+                    <li><b>Herbivori (+/-):</b> Organisme memakan bagian tumbuhan atau alga (contoh: sapi memakan rumput).</li>
+                    <li><b>Simbiosis:</b>
+                        <ul>
+                            <li><i>Parasitisme (+/-):</i> Parasit untung, inang rugi (contoh: kutu).</li>
+                            <li><i>Mutualisme (+/+):</i> Saling menguntungkan (contoh: bakteri pengikat nitrogen & tumbuhan polong).</li>
+                            <li><i>Komensalisme (+/0):</i> Satu untung, satu tidak rugi/untung (contoh: teritip pada paus).</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            
+            <button class="btn-back" onclick="masukLayar('screen-menu')">⬅ Kembali ke Menu Utama</button>
+        </div>
+    </div>
+
+    <!-- 5. HALAMAN GAME (Background sama dengan Login) -->
+    <div id="screen-game" class="screen">
+        <button class="btn-back" style="position: absolute; top: 20px; left: 20px;" onclick="masukLayar('screen-menu')">⬅ Kembali</button>
+        <h1 style="text-align: center; color: white; text-shadow: 2px 2px 4px #000; padding-top: 50px;">🎮 Ayo Main dan Belajar!</h1>
+        <div class="menu-container" style="height: auto; margin-top: 20px;">
+            
+            <!-- A. Memorize -->
+            <div class="menu-card">
+                <h3>A. Memorize 🧠</h3>
+                <p>Cocokkan kartu ekosistem & komponennya!</p>
+                <div style="margin-top: 15px;">
+                    <a href="https://www.educaplay.com/learning-resources/31068305-memory_game.html" target="_blank" style="display:block; margin-bottom:10px; color:#2E8B57; font-weight:bold; text-decoration:none;">🔗 Main Ekosistem</a>
+                    <a href="https://www.educaplay.com/learning-resources/31069321-komponen_biotik_dan_abiotik_lingkungan.html" target="_blank" style="display:block; color:#2E8B57; font-weight:bold; text-decoration:none;">🔗 Main Biotik & Abiotik</a>
+                </div>
+            </div>
+
+            <!-- B. Puzzle -->
+            <div class="menu-card">
+                <h3>B. Puzzle 🧩</h3>
+                <p>Susun kepingan gambar menjadi utuh!</p>
+                <div style="margin-top: 15px;">
+                    <a href="https://puzzel.org/id/jigsaw/play?p=-P3xJuat0gxCfdjLCvIW" target="_blank" style="display:block; margin-bottom:10px; color:#d35400; font-weight:bold; text-decoration:none;">🔗 Puzzle Siklus Air</a>
+                    <a href="https://puzzel.org/id/jigsaw/play?p=-P3xfXDwmyDYnMdXamQs" target="_blank" style="display:block; color:#d35400; font-weight:bold; text-decoration:none;">🔗 Puzzle Rantai Makanan</a>
+                </div>
+            </div>
+
+            <!-- C. Quiz -->
+            <div class="menu-card">
+                <h3>C. Quiz Materi 📝</h3>
+                <p>Jawab pertanyaan dan raih skor tertinggi!</p>
+                <div style="margin-top: 15px;">
+                    <a href="https://wayground.com/join?gc=31550333" target="_blank" style="display:block; margin-bottom:10px; color:#2980b9; font-weight:bold; text-decoration:none;">🔗 Ikuti Quiz Sekarang</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- FITUR CHATBOT AI -->
+    <div class="chatbot-btn" onclick="toggleChat()">🤖</div>
+    <div class="chat-window" id="chatWindow">
+        <div class="chat-header">Tanya AI - Asisten Ekologi</div>
+        <div class="chat-body" id="chatBody">
+            <p><strong>AI:</strong> Halo! Ada materi ekologi yang belum kamu pahami? Tanyakan saja di sini!</p>
+        </div>
+        <div class="chat-input">
+            <input type="text" id="userInput" placeholder="Ketik pertanyaanmu...">
+            <button onclick="kirimPesan()">Kirim</button>
+        </div>
+    </div>
+
+    <!-- LOGIKA JAVASCRIPT -->
+    <script>
+        // Navigasi Antar Layar
+        function masukLayar(layarId) {
+            if (layarId === 'screen-menu') {
+                const nama = document.getElementById('nama').value;
+                const kelas = document.getElementById('kelas').value;
+                if (!nama || !kelas) {
+                    alert('Harap isi Nama dan Kelas terlebih dahulu ya!');
+                    return;
+                }
+            }
+            // Sembunyikan semua layar
+            const screens = document.querySelectorAll('.screen');
+            screens.forEach(screen => {
+                screen.classList.remove('active-screen');
+            });
+            // Tampilkan layar yang dipilih
+            document.getElementById(layarId).classList.add('active-screen');
+            window.scrollTo(0, 0); // Scroll ke atas
+        }
+
+        // Fitur Chatbot AI Sederhana (UI Interaktif)
+        function toggleChat() {
+            const chatWindow = document.getElementById('chatWindow');
+            if (chatWindow.style.display === "none" || chatWindow.style.display === "") {
+                chatWindow.style.display = "block";
+            } else {
+                chatWindow.style.display = "none";
+            }
+        }
+
+        function kirimPesan() {
+            const input = document.getElementById('userInput');
+            const pesan = input.value;
+            if (pesan.trim() !== "") {
+                const chatBody = document.getElementById('chatBody');
+                // Tampilkan chat user
+                chatBody.innerHTML += `<p style="text-align:right; color:#2E8B57;"><strong>Kamu:</strong> ${pesan}</p>`;
+                input.value = "";
+                
+                // Simulasi Balasan AI (Bisa dikembangkan lagi)
+                setTimeout(() => {
+                    chatBody.innerHTML += `<p><strong>AI:</strong> Pertanyaan yang bagus! Dalam ekologi, hal itu sangat berkaitan dengan interaksi makhluk hidup dengan lingkungannya. Jangan ragu baca kembali bagian 'Materi' ya!</p>`;
+                    chatBody.scrollTop = chatBody.scrollHeight; // Auto scroll ke bawah
+                }, 1000);
+            }
+        }
+    </script>
+
+</body>
+</html>
